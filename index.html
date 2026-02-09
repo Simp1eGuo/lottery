@@ -195,10 +195,10 @@ btn.onclick = ()=>{
       spinning=false;
       const idx = pickIndex(rotation);
       const prize = prizes[idx] ?? prizes[0]; // ✅ 再加一道保險
-      resultEl.textContent="✅ 你抽到："+prize;
+      resultEl.textContent="🎉獎品："+prize;
       resultEl.style.display="block";
       btn.disabled=false;
-      btn.textContent="別想作弊重抽哦!🤥";
+      btn.textContent="不要作弊再點一次重抽哦!🤥";
 
       sendResult({
         prize,
@@ -212,6 +212,7 @@ btn.onclick = ()=>{
 </script>
 </body>
 </html>
+
 
 
 
