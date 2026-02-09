@@ -75,8 +75,8 @@ const prizes = [
   "😏 （測試獎勵）"
 ];
 
-// 你的 Google Apps Script Web App URL
-const WEBHOOK_URL = "https://discord.com/api/webhooks/1470385011277435103/u9zLFC5JjyLNsQpS8qJXwspVEyppZgAwsrbwr3UB5Bb4f3dcLWKmRLFvFn2jKSunUeXj";
+// 👉 換成你自己的 Discord Webhook URL
+const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1470385011277435103/u9zLFC5JjyLNsQpS8qJXwspVEyppZgAwsrbwr3UB5Bb4f3dcLWKmRLFvFn2jKSunUeXj";
 /* ===== 可改區結束 ===== */
 
 const canvas = document.getElementById("wheel");
@@ -132,22 +132,28 @@ function pickIndex(rot){
   return Math.floor(a/arc);
 }
 
+// ===== Discord Webhook 傳送 =====
 async function sendResult(data){
-  if(!WEBHOOK_URL) return;
+  if(!DISCORD_WEBHOOK_URL) return;
 
-  const form = new URLSearchParams();
-  form.append("prize", data.prize);
-  form.append("index", data.index);
-  form.append("time", data.time);
-  form.append("ua", data.ua);
+  const message =
+    "🎲 **抽獎結果**\n" +
+    "獎品：" + data.prize + "\n" +
+    "時間：" + data.time + "\n" +
+    "裝置：" + data.ua;
 
   try{
-    await fetch(WEBHOOK_URL,{
-      method:"POST",
-      body:form
+    await fetch(DISCORD_WEBHOOK_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        content: message
+      })
     });
   }catch(e){
-    console.warn("send failed",e);
+    console.warn("Discord webhook failed", e);
   }
 }
 
@@ -187,7 +193,6 @@ btn.onclick = ()=>{
 
       sendResult({
         prize,
-        index: idx,
         time: new Date().toISOString(),
         ua: navigator.userAgent
       });
@@ -198,4 +203,3 @@ btn.onclick = ()=>{
 </script>
 </body>
 </html>
-
