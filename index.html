@@ -126,10 +126,22 @@ function drawWheel(rot){
 
 drawWheel(0);
 
+/* ✅ 修正版：永遠回傳 0..n-1，不會負數、不會 undefined */
 function pickIndex(rot){
-  const arc = Math.PI*2/prizes.length;
-  const a = ((-Math.PI/2 - rot) + Math.PI*2) % (Math.PI*2);
-  return Math.floor(a/arc);
+  const n = prizes.length;
+  const arc = (Math.PI * 2) / n;
+
+  // JS 的 % 對負數會得到負值，所以要做「正規化 modulo」
+  let a = (-Math.PI/2 - rot) % (Math.PI * 2);
+  a = (a + Math.PI * 2) % (Math.PI * 2);
+
+  let idx = Math.floor(a / arc);
+
+  // 保險：避免浮點誤差
+  if (idx >= n) idx = n - 1;
+  if (idx < 0) idx = 0;
+
+  return idx;
 }
 
 // ===== Discord Webhook 傳送 =====
@@ -145,12 +157,8 @@ async function sendResult(data){
   try{
     await fetch(DISCORD_WEBHOOK_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        content: message
-      })
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: message })
     });
   }catch(e){
     console.warn("Discord webhook failed", e);
@@ -185,7 +193,7 @@ btn.onclick = ()=>{
     }else{
       spinning=false;
       const idx = pickIndex(rotation);
-      const prize = prizes[idx];
+      const prize = prizes[idx] ?? prizes[0]; // ✅ 再加一道保險
       resultEl.textContent="✅ 你抽到："+prize;
       resultEl.style.display="block";
       btn.disabled=false;
