@@ -51,8 +51,8 @@
 
 <body>
 <div class="wrap">
-  <h2>🎲 今日限定抽獎</h2>
-  <p class="sub">按下去就算數。手氣不好不要怪我（我也怕）😶‍🌫️</p>
+  <h2>🎲情人節&新年限定轉盤獎</h2>
+  <p class="sub">根據轉到的類別，可以任選一樣商城禮物🎁</p>
 
   <div class="stage">
     <div class="pointer"></div>
@@ -62,7 +62,7 @@
   <button id="spinBtn" class="btn">開始抽獎</button>
 
   <div id="result" class="result"></div>
-  <div class="tiny">※ 若沒聽到聲音：請確認手機未靜音 / 音量不為 0</div>
+  <div class="tiny">※只限抽一次哦！</div>
 </div>
 
 <script>
@@ -198,7 +198,7 @@ btn.onclick = ()=>{
       resultEl.textContent="✅ 你抽到："+prize;
       resultEl.style.display="block";
       btn.disabled=false;
-      btn.textContent="再抽一次（不建議太貪心）";
+      btn.textContent="別想作弊再抽哦:unamused: ";
 
       sendResult({
         prize,
@@ -212,4 +212,5 @@ btn.onclick = ()=>{
 </script>
 </body>
 </html>
+
 
